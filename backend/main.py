@@ -7,6 +7,8 @@ from pathlib import Path
 from typing import Literal
 
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 from backend.world import migrate, apply, advance, entry
 from backend.story import available, resolve
@@ -140,6 +142,14 @@ def create_app(db_path=None):
         except ValueError as exc:
             raise HTTPException(409, str(exc)) from exc
         return world()
+
+    root = Path(__file__).resolve().parents[1]
+    app.mount("/web", StaticFiles(directory=root / "web"), name="web")
+    app.mount("/assets", StaticFiles(directory=root / "client/assets"), name="assets")
+
+    @app.get("/", include_in_schema=False)
+    def browser_game():
+        return FileResponse(root / "web/index.html")
 
     return app
 

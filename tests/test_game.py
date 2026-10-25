@@ -229,3 +229,13 @@ def test_company_story_accounts_and_decline(tmp_path):
     assert declined["cash"] == result["cash"]
     assert declined["company"]["capital"] == result["company"]["capital"]
     assert declined["story_done"] == ["client", "team"]
+
+
+def test_browser_routes_and_assets(tmp_path):
+    client = TestClient(create_app(tmp_path / "web.db"))
+    assert 'lang="zh-Hant"' in client.get("/").text
+    assert client.get("/web/app.js").status_code == 200
+    assert client.get("/web/style.css").status_code == 200
+    assert client.get("/assets/city_atlas.png").headers["content-type"] == "image/png"
+    assert client.get("/assets/audio/city_evening.wav").status_code == 200
+    assert client.get("/web/../backend/main.py").status_code == 404

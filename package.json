@@ -1,0 +1,6 @@
+{
+  "name": "second-life-browser-tests",
+  "private": true,
+  "scripts": {"test:web": "node tests/web_smoke.cjs"},
+  "devDependencies": {"playwright": "1.62.1"}
+}

@@ -15,6 +15,20 @@ python3 -m venv .venv
 啟動腳本會啟動本機 API、確認健康檢查，再開啟 Godot；關閉遊戲後停止它啟動的後端。
 Windows 開發可在兩個終端分別執行 `python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000` 與 `godot --path client`（先啟用已安裝依賴的虛擬環境）。目前尚未製作 Windows 發行包。
 
+## 瀏覽器試玩（0.5）
+
+不需要 Godot。Windows 安裝 Python 3.12 後，解壓縮試玩套件並雙擊 `scripts/start_web.bat`。首次執行會從套件登錄站安裝 Python 依賴，需要網路；之後遊戲核心、美術與音訊皆由本機提供。看到服務啟動完成後，在瀏覽器網址列輸入 `127.0.0.1:8000`，保留啟動視窗；按 Ctrl+C 停止服務。Windows 批次檔尚未在 Windows 實機驗證。
+
+Linux/macOS 從根目錄建立虛擬環境、安裝 `requirements.lock.txt` 後執行 `./scripts/start_web.sh`。可用 `PORT` 調整埠號。
+
+- 網頁提供角色建立、城市／生活／社交／公司／故事、三槽存讀檔、人物檔案與設定。
+- 字體、音量與 A/B/C 模式保存在瀏覽器；音樂需按右上角按鈕啟用。
+- 遊戲狀態與存檔存在本機服務，重新整理會保留目前工作階段；重新啟動服務後需讀取手動存檔。
+- 桌面版與網頁版預設共用 `.local/game.sqlite3`，請勿同時啟動兩個服務。多個瀏覽器分頁會控制同一個世界；本版是單人本機試玩，沒有帳號與多人隔離，不適合直接公開部署。
+- 本套件沒有公開網址；`index.html` 需要服務啟動，不能直接雙擊檔案遊玩。
+
+網頁驗證：啟動隔離測試服務後執行 `npm ci`、`CHROMIUM_PATH=/path/to/chromium npm run test:web`；測試會重設測試世界並覆蓋槽 1，僅可對測試資料庫執行。預設測試網址由 `GAME_TEST_URL` 指定。測試截圖保存在 `.local/`。
+
 ## 已實作（0.4）
 
 - 主選單：新遊戲、讀檔、繼續、設定與離開。
